@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="{{ url_for('static', filename='styles/styles-minalba.css') }}"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Edição de placas - Minalba</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Edição de placas</h1>
+
+      <section class="form-search">
+        <form
+          class="form-elements"
+          method="GET"
+          action="{{ url_for('placas_minalba') }}"
+        >
+          <div>
+            <input
+              type="text"
+              name="search"
+              placeholder="🔍 Digite a placa desejada"
+            />
+          </div>
+          <div>
+            <button type="submit">Pesquisar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="div-table">
+        <table class="table-1">
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Classificação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in placas %}
+            <tr>
+              <td>{{p.placa}}</td>
+              <td>{{ 'Indefinido' if p.classificacao is none else p.classificacao }}</td>
+              <td>
+              <a href="/placas-minalba/edit/{{p.placa}}" class="edit-button">Editar</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+      <div class="pagination">{{ pagination.links }}</div>
+    </div>
+  </body>
+</html>

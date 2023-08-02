@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro {{macro.msg_original}}</title>
+    <link
+      href="{{ url_for('static', filename='styles/styles-minalba.css') }}"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    
+    <h1>Editar macro</h1>
+    <section class="form-search">
+        <form action="/macros-minalba/edit/{{macro.msg_original.replace('/','-')}}" class="container-edit" method="post">
+            <div class="row">
+                <div class="value-read">
+                    <div class="label">
+                        <label for="placa" class="label-edit">Mensagem original:</label>
+                    </div>
+                    <div class="input-form">
+                        <input type="text" name="original" id="original" placeholder="Mensagem original" class="form-control" value="{{macro.msg_original}}" readonly>
+                    </div>
+                </div>
+                <div class="value-read">
+                    <div class="label">
+                        <label for="macro" class="label-edit">Mensagem corrigida:</label>
+                    </div>
+                    <div class="input-form">
+                        <select name="nova" id="nova" class="form-control">
+                            <option value="Indefinido" {% if macro.msg_corrigida == None %}selected{% endif %}>Indefinido</option>
+                            {% for m in msgs %}
+                            <option value="{{m}}" {% if macro.msg_corrigida == m and macro.msg_corrigida != None %}selected{% endif %}>{{m}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <a href="/macros-minalba" class="btn-back">Voltar</a>
+                    <button type="submit" class="btn=btn-send">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</body>
+</html>

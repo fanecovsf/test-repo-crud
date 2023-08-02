@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Editar cliente {{cliente.nome}}</title>
+</head>
+<body>
+
+    <h1 style="text-align: center;">Editar cliente {{cliente.nome}}</h1>
+    <section class="form-search">
+        <form action="/clientes/edit/{{ cliente.codigo }}" class="container-edit" method="post" >
+            <div class="row">
+                <div class="value-read">
+                    <div class="label">
+                        <label for="codigo" class="label-edit">Código:</label>
+                    </div>
+                    <div class="input-form">
+                        <input type="text" name="codigo" id="codigo" placeholder="Código" class="form-control" value="{{cliente.codigo}}" readonly>
+                    </div>
+                </div>
+                <div class="value-read">
+                    <div class="label">
+                        <label for="codigo" class="label-edit">Nome:</label>
+                    </div>
+                    <div class="input-form">
+                        <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control" value="{{cliente.nome}}" readonly>
+                    </div>
+                </div>
+                <div class="value">
+                    <div class="label">
+                        <label for="modelo" class="label-edit">Modelo de negócio:</label>
+                    </div>
+                    <div class="input-form">
+                        <select name="modelo" id="modelo" class="form-control">
+                            <option value="B2C" {% if cliente.modelo_de_negocio == 'B2C' %}selected{% endif %}>B2C</option>
+                            <option value="B2B" {% if cliente.modelo_de_negocio == 'B2B' %}selected{% endif %}>B2B</option>
+                            <option value="Indefinido" {% if cliente.modelo_de_negocio == 'Indefinido' %}selected{% endif %}>Indefinido</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="value">
+                    <div class="label">
+                        <label for="tipo_cliente" class="label-edit">Tipo de cliente:</label>
+                    </div>
+                    <div class="input-form">
+                        <select name="tipo_cliente" id="tipo_cliente" class="form-control">
+                            <option value="Dedicado Klabin" {% if cliente.tipo_de_cliente == 'Dedicado Klabin' %}selected{% endif %}>Dedicado Klabin</option>
+                            <option value="Dedicado Suzano" {% if cliente.tipo_de_cliente == 'Dedicado Suzano' %}selected{% endif %}>Dedicado Suzano</option>
+                            <option value="Dedicado Vale" {% if cliente.tipo_de_cliente == 'Dedicado Vale' %}selected{% endif %}>Dedicado Vale</option>
+                            <option value="Frete retorno" {% if cliente.tipo_de_cliente == 'Frete retorno' %}selected{% endif %}>Frete retorno</option>
+                            <option value="Indefinido" {% if cliente.tipo_de_cliente == 'Indefinido' %}selected{% endif %}>Indefinido</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <a href="/clientes" class="btn-back">Voltar</a>
+                    <button type="submit" class="btn-btn-send">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+    
+</body>
+</html>

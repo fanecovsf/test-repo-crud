@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placa {{placa.placa}}</title>
+    <link
+      href="{{ url_for('static', filename='styles/styles-minalba.css') }}"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    
+    <h1>Editar placa {{placa.placa}}</h1>
+    <section class="form-search">
+        <form action="/placas-minalba/edit/{{placa.placa}}" class="container-edit" method="post">
+            <div class="row">
+                <div class="value-read">
+                    <div class="label">
+                        <label for="placa" class="label-edit">Placa:</label>
+                    </div>
+                    <div class="input-form">
+                        <input type="text" name="placa" id="placa" placeholder="Placa" class="form-control" value="{{placa.placa}}" readonly>
+                    </div>
+                </div>
+                <div class="value-read">
+                    <div class="label">
+                        <label for="placa" class="label-edit">Classificação:</label>
+                    </div>
+                    <div class="input-form">
+                        <select name="classificacao" id="classificacao" class="form-control">
+                            <option value="Indefinido" {% if placa.classificacao == None %}selected{% endif %}>Indefinido</option>
+                            <option value="Fake" {% if placa.classificacao == 'Fake' %}selected{% endif %}>Fake</option>
+                            <option value="Nordeste" {% if placa.classificacao == 'Nordeste' %}selected{% endif %}>Nordeste</option>
+                            <option value="Sudeste" {% if placa.classificacao == 'Sudeste' %}selectec{% endif %}>Sudeste</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <a href="/placas-minalba" class="btn-back">Voltar</a>
+                    <button type="submit" class="btn=btn-send">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</body>
+</html>
