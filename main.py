@@ -1,20 +1,29 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, Response
 from flask_paginate import Pagination, get_page_args
-from models.minalba import MsgMinalba, PlacasMinalba
+from models.minalba import MsgMinalba, PlacasMinalba, Contato, Unidade
 from models.vibra import Cliente, Viagens, Checkpoints
 from db_config import db
 from sqlalchemy import exc, event, case
+import json
 
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:pRxI65oIubsdTlf@4.228.57.67:5432/db_vibra'
-app.config['SQLALCHEMY_DATABASE_URI_2'] = 'postgresql://postgres:pRxI65oIubsdTlf@4.228.57.67:5432/db_minalba'
-app.config['SQLALCHEMY_DATABASE_URI_3'] = 'postgresql://postgres:pRxI65oIubsdTlf@4.228.57.67:5432/BD01-VIBRA'
+
+app.config['RESTFUL_JSON'] = {
+    'ensure_ascii': False
+}
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db_vibra'
+app.config['SQLALCHEMY_DATABASE_URI_2'] = 'sqlite:///db_minalba'
+app.config['SQLALCHEMY_DATABASE_URI_3'] = 'sqlite:///BD01-VIBRA'
+app.config['SQLALCHEMY_DATABASE_URI_4'] = 'sqlite:///database.db'
 
 app.config['SQLALCHEMY_BINDS'] = {
     'db_vibra': app.config['SQLALCHEMY_DATABASE_URI'],
     'db_minalba': app.config['SQLALCHEMY_DATABASE_URI_2'],
-    'BD01-VIBRA': app.config['SQLALCHEMY_DATABASE_URI_3']
+    'BD01-VIBRA': app.config['SQLALCHEMY_DATABASE_URI_3'],
+    'test': app.config['SQLALCHEMY_DATABASE_URI_4']
 }
 
 app.config['SQLALCHEMY_POOL_SIZE'] = 10
@@ -176,6 +185,76 @@ def edit_macros(msg):
     return render_template('edit-macros-minalba.html', macro=macro, msgs=msgs)
 
 
+@app.route('/minalba/contatos')
+def contatos():
+    contatos = db.session.query(Contato)
+
+    data_list = []
+
+    for contato in contatos:
+        data = {
+            'id':contato.id,
+            'nome':contato.nome,
+            'cargo':contato.cargo,
+            'nivel':contato.nivel,
+            'turno':contato.turno,
+            'email':contato.email,
+            'telefone':contato.telefone,
+            'unidade': {
+                'id': contato.unidade.id,
+                'unidade': contato.unidade.unidade
+            }
+        }
+
+        data_list.append(data)
+
+    return Response(response=json.dumps(data_list, ensure_ascii=False), status=200, content_type="application/json")
+
+
+@app.route('/minalba/contatos/<int:id>')
+def contato(id):
+    contato = db.session.get(Contato, id)
+
+    data = {
+        'id':contato.id,
+        'nome':contato.nome,
+        'cargo':contato.cargo,
+        'nivel':contato.nivel,
+        'turno':contato.turno,
+        'email':contato.email,
+        'telefone':contato.telefone,
+        'unidade': {
+            'id': contato.unidade.id,
+            'unidade': contato.unidade.unidade
+        }
+    }
+
+    return Response(response=json.dumps(data, ensure_ascii=False), status=200, content_type="application/json")
+
+
+#@app.route('/minalba/contatos/add')
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all('test')
+
+        '''
+        unidade1 = Unidade(None, 'Campos do Jordão')
+        unidade2 = Unidade(None, 'Barra funda')
+        
+        db.session.add(unidade1)
+        db.session.add(unidade2)
+
+        contato1 = Contato(None, 'Luciano', 'Diretor', 4, 'ADM', None, None, unidade1)
+        contato2 = Contato(None, 'Anderson', 'Supervisor', 2, 'B', None, None, unidade2)
+
+        db.session.add(contato1)
+        db.session.add(contato2)
+        '''
+
+
+        db.session.commit()
+
+    app.run(debug=True, host='0.0.0.0', port=8080)
