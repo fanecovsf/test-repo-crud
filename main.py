@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_paginate import Pagination, get_page_args
-from models.models import db, Cliente, MsgMinalba, PlacasMinalba, Viagens, Checkpoints
+from models.minalba import MsgMinalba, PlacasMinalba
+from models.vibra import Cliente, Viagens, Checkpoints
+from db_config import db
 from sqlalchemy import exc, event, case
 
 
