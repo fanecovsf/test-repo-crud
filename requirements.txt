@@ -7,5 +7,5 @@ MarkupSafe==1.1.1
 Werkzeug==1.0.1
 psycopg2==2.9.6
 SQLAlchemy==2.0.19
-flask-paginate==2022.1.8
-Flask-SQLAlchemy==3.0.5
+flask_paginate==2022.1.8
+flas_sqlalchemy==3.0.5
